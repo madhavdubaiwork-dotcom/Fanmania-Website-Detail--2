@@ -1,4 +1,40 @@
 (function () {
+  const initCursorGlow = () => {
+    if (
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const glow = document.createElement("div");
+    glow.className = "cursor-glow";
+    glow.setAttribute("aria-hidden", "true");
+    document.body.appendChild(glow);
+
+    let frame = 0;
+    let x = 0;
+    let y = 0;
+
+    document.addEventListener("pointermove", (event) => {
+      x = event.clientX;
+      y = event.clientY;
+
+      if (!frame) {
+        frame = window.requestAnimationFrame(() => {
+          glow.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+          frame = 0;
+        });
+      }
+
+      glow.classList.add("is-active");
+    }, { passive: true });
+
+    document.addEventListener("pointerleave", () => {
+      glow.classList.remove("is-active");
+    });
+  };
+
   const initMotion = () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
       return;
@@ -48,9 +84,14 @@
     });
   };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initMotion, { once: true });
-  } else {
+  const init = () => {
+    initCursorGlow();
     initMotion();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
   }
 })();
