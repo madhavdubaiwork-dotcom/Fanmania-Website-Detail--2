@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Their favourite characters. Their everyday essentials. That's Fanmania.">
+  <title>FanMania — Their favourite characters. Their everyday essentials. That's Fanmania.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #ffffff;
+      --panel: #f3f4f6;
+      --white: #15171d;
+      --muted: #555b66;
+      --red: #f12b43;
+      --blue: #3178ff;
+      --line: rgba(9,10,14,.13);
+      --display: "Barlow Condensed", Impact, sans-serif;
+      --body: "DM Sans", Arial, sans-serif;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #11141a;
+      --panel: #1b2029;
+      --white: #f4f6fb;
+      --muted: #aab1bf;
+      --line: rgba(255,255,255,.14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--ink); color: var(--white); font-family: var(--body); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .site-shell { overflow: clip; }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+
+    .topbar {
+      position: fixed; z-index: 10; inset: 0 0 auto; height: 84px;
+      border-bottom: 1px solid rgba(9,10,14,.1);
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 5px 22px rgba(9,10,14,.045);
+      backdrop-filter: blur(16px);
+    }
+    .nav { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: inline-flex; align-items: center; }
+    .brand img { display: block; width: 158px; height: auto; }
+    .nav-links { display: flex; align-items: center; gap: clamp(12px, 2vw, 25px); color: #343841; font-size: 12px; font-weight: 600; }
+    .nav-links a:not(.button):hover { color: var(--red); }
+    .theme-toggle { display: inline-flex; align-items: center; gap: 10px; padding: 0; border: 0; background: transparent; color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: color .2s ease, transform .2s ease; }
+    .theme-toggle:hover { color: var(--blue); transform: translateY(-1px); }
+    .theme-toggle-label { line-height: 1; }
+    .theme-toggle-track { position: relative; display: inline-block; width: 38px; height: 20px; border: 1px solid var(--line); border-radius: 999px; background: rgba(9,10,14,.08); transition: background .2s ease, border-color .2s ease; }
+    .theme-toggle-knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #ffffff; box-shadow: 0 1px 4px rgba(9,10,14,.22); transition: transform .2s ease, background .2s ease; }
+    .menu-toggle { display: none; width: 42px; height: 42px; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 4px; background: white; cursor: pointer; }
+    .menu-toggle svg { width: 19px; height: 19px; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      min-height: 48px; padding: 0 22px; border: 0; border-radius: 5px;
+      background: var(--red); color: white; font-size: 13px; font-weight: 700;
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .button:hover { transform: translateY(-3px); background: #ff4056; box-shadow: 0 10px 28px rgba(241,43,67,.25); }
+    .button svg { width: 15px; height: 15px; }
+    .button-outline { background: transparent; border: 1px solid rgba(9,10,14,.3); color: var(--white); }
+    .button-outline:hover { background: rgba(9,10,14,.06); box-shadow: none; }
+    section[id] { scroll-margin-top: 96px; }
+
+    .hero {
+      position: relative; min-height: 760px; padding: 166px 0 108px;
+      display: flex; align-items: center; isolation: isolate;
+      background:
+        radial-gradient(ellipse at 75% 54%, rgba(34,84,181,.12), transparent 34%),
+        radial-gradient(ellipse at 21% 83%, rgba(189,28,51,.09), transparent 30%),
+        #ffffff;
+    }
+    .hero::before {
+      content: ""; position: absolute; z-index: -1; inset: 0;
+      background-image: linear-gradient(rgba(9,10,14,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(9,10,14,.035) 1px, transparent 1px);
+      background-size: 68px 68px; mask-image: linear-gradient(to bottom, black, transparent 90%);
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.03fr .97fr; align-items: center; gap: 36px; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: #555b66; font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 25px; height: 2px; background: var(--red); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 560px; margin: 20px 0 18px; font-family: var(--display); font-size: clamp(52px, 6vw, 86px); font-weight: 800; letter-spacing: -.028em; line-height: .9; text-transform: uppercase; }
+    h1 .accent { color: var(--red); }
+    .hero-copy { max-width: 430px; margin-bottom: 29px; color: #555b66; font-size: 13px; line-height: 1.7; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-note { display: flex; align-items: center; gap: 11px; margin-top: 33px; color: #555b66; font-size: 11px; }
+    .avatar-stack { display: flex; padding-left: 3px; }
+    .avatar { display: grid; width: 27px; height: 27px; margin-left: -4px; place-items: center; border: 2px solid var(--ink); border-radius: 50%; background: linear-gradient(135deg,#f89967,#963c45); color: white; font-size: 9px; font-weight: 700; }
+    .avatar:nth-child(2) { background: linear-gradient(135deg,#80c6ff,#4549a3); }
+    .avatar:nth-child(3) { background: linear-gradient(135deg,#a6cf7c,#44784b); }
+    .avatar:nth-child(4) { background: linear-gradient(135deg,#ec87ae,#813d83); }
+    .hero-note strong { color: #15171d; }
+
+    .visual { position: relative; min-height: 490px; display: grid; align-items: center; }
+    .hero-video { width: 100%; aspect-ratio: 16 / 11; object-fit: cover; border: 1px solid rgba(9,10,14,.12); border-radius: 8px; background: #e9edf3; box-shadow: 0 28px 70px rgba(18,35,60,.17); }
+    .video-caption { margin: 11px 0 0; color: #636a76; font-size: 9px; letter-spacing: .08em; text-align: right; text-transform: uppercase; }
+
+    .ticker { position: relative; overflow: hidden; padding: 17px 0; border-block: 1px solid rgba(9,10,14,.12); background: #f3f4f6; }
+    .ticker-track { display: flex; width: max-content; align-items: center; animation: marquee 28s linear infinite; }
+    .ticker-item { display: inline-flex; align-items: center; gap: 24px; padding: 0 25px; color: #242731; font-family: var(--display); font-size: 17px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
+    .ticker-item::after { content: "✦"; color: var(--red); font-size: 13px; }
+
+    .section { padding: 112px 0; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 42px; }
+    .section-heading h2 { max-width: 560px; margin: 13px 0 0; font-family: var(--display); font-size: clamp(46px, 6vw, 72px); font-weight: 800; line-height: .9; text-transform: uppercase; }
+    .section-heading h2 span { color: var(--red); }
+    .section-heading p { max-width: 310px; margin: 0 0 2px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feature-card { position: relative; min-height: 270px; overflow: hidden; padding: 26px; border: 1px solid var(--line); border-radius: 7px; background: linear-gradient(145deg, #ffffff, #f3f4f6); transition: transform .25s ease, border-color .25s ease; }
+    .feature-card:hover { transform: translateY(-7px); border-color: rgba(241,43,67,.6); }
+    .feature-number { color: #737985; font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: .1em; }
+    .feature-icon { display: grid; width: 46px; height: 46px; margin: 23px 0 20px; place-items: center; border: 1px solid rgba(49,120,255,.3); border-radius: 7px; background: rgba(49,120,255,.1); color: #76a3ff; }
+    .feature-icon svg { width: 22px; height: 22px; }
+    .feature-card:nth-child(2) .feature-icon { border-color: rgba(241,43,67,.3); background: rgba(241,43,67,.1); color: #ff687b; }
+    .feature-card:nth-child(3) .feature-icon { border-color: rgba(9,10,14,.16); background: rgba(9,10,14,.05); color: #222631; }
+    .feature-card h3 { margin-bottom: 9px; font-family: var(--display); font-size: 25px; font-weight: 700; text-transform: uppercase; }
+    .feature-card p { max-width: 290px; margin-bottom: 0; color: var(--muted); font-size: 12px; line-height: 1.75; }
+    .card-watermark { position: absolute; right: 16px; bottom: -27px; color: rgba(9,10,14,.045); font-family: var(--display); font-size: 132px; font-weight: 900; line-height: 1; }
+
+    .journey { position: relative; padding: 105px 0; overflow: hidden; background: radial-gradient(ellipse at 75% 50%, rgba(49,120,255,.12), transparent 42%), linear-gradient(180deg, #f5f7fb, #fff); }
+    .journey::before, .journey::after { position: absolute; width: 330px; height: 330px; border: 1px solid rgba(49,120,255,.09); border-radius: 50%; content: ""; pointer-events: none; }
+    .journey::before { top: -190px; right: -90px; box-shadow: 0 0 0 35px rgba(49,120,255,.025), 0 0 0 75px rgba(49,120,255,.02); }
+    .journey::after { bottom: -245px; left: -120px; border-color: rgba(241,43,67,.1); }
+    .journey-inner { position: relative; z-index: 1; }
+    .journey-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 35px; }
+    .journey-heading h2 { max-width: 600px; margin: 13px 0 0; font-family: var(--display); font-size: clamp(46px, 6vw, 72px); font-weight: 800; line-height: .9; text-transform: uppercase; }
+    .journey-heading h2 span { color: var(--red); }
+    .journey-heading p { max-width: 330px; margin: 0 0 3px; color: #555b66; font-size: 12px; line-height: 1.8; }
+    .timeline-glass { position: relative; overflow: hidden; padding: clamp(23px, 5vw, 55px); border: 1px solid rgba(255,255,255,.85); border-radius: 10px; background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(229,237,250,.67)); box-shadow: 0 28px 80px rgba(27,51,89,.12), inset 0 1px rgba(255,255,255,.95); backdrop-filter: blur(22px) saturate(150%); -webkit-backdrop-filter: blur(22px) saturate(150%); animation: timeline-float 12s ease-in-out infinite; }
+    .timeline-glass::before { position: absolute; top: -180px; right: -85px; width: 410px; height: 410px; border: 1px solid rgba(49,120,255,.1); border-radius: 50%; box-shadow: 0 0 0 35px rgba(49,120,255,.025), 0 0 0 75px rgba(49,120,255,.018); content: ""; pointer-events: none; animation: timeline-breathe 11s ease-in-out infinite; }
+    .timeline-content { position: relative; z-index: 1; min-height: 190px; display: grid; grid-template-columns: .75fr 1.25fr; align-items: center; gap: 30px; }
+    .timeline-content.is-changing .timeline-year { animation: timeline-year-in .9s cubic-bezier(.2,.7,.25,1) both; }
+    .timeline-content.is-changing .timeline-detail { animation: timeline-detail-in 1.1s cubic-bezier(.2,.7,.25,1) both; }
+    .timeline-year { color: var(--red); background: linear-gradient(110deg, #f12b43 12%, #bd386e 52%, #3178ff 92%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: var(--body); font-size: clamp(88px, 15vw, 166px); font-weight: 800; letter-spacing: -.08em; line-height: .9; filter: drop-shadow(0 12px 18px rgba(49,120,255,.12)); }
+    .timeline-detail { max-width: 490px; }
+    .timeline-detail .year-label { color: #356fc4; font-size: 9px; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; }
+    .timeline-detail h3 { margin: 12px 0 10px; font-family: var(--body); font-size: clamp(23px, 3vw, 32px); font-weight: 700; line-height: 1.35; }
+    .timeline-detail h3::after { display: block; width: 48px; height: 3px; margin-top: 9px; border-radius: 2px; background: linear-gradient(90deg, #f12b43, #3178ff); content: ""; }
+    .timeline-detail p { min-height: 43px; margin: 0; color: #505662; font-size: 12px; line-height: 1.8; }
+    .timeline-unverified { display: inline-block; margin-top: 13px; padding: 6px 8px; border: 1px solid rgba(21,23,29,.16); border-radius: 2px; color: #606570; font-size: 8px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+    .timeline-slider-row { position: relative; z-index: 1; margin-top: 35px; padding-top: 23px; border-top: 1px solid rgba(21,23,29,.12); }
+    .timeline-range { width: 100%; height: 25px; margin: 0; appearance: none; -webkit-appearance: none; background: transparent; cursor: ew-resize; touch-action: pan-y; }
+    .timeline-range::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, #f12b43 0, #3178ff var(--slider-progress, 0%), rgba(21,23,29,.16) var(--slider-progress, 0%) 100%); }
+    .timeline-range::-moz-range-track { height: 4px; border-radius: 4px; background: rgba(21,23,29,.16); }
+    .timeline-range::-moz-range-progress { height: 4px; border-radius: 4px; background: linear-gradient(90deg, #f12b43, #bd386e 52%, #3178ff); }
+    .timeline-range::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: -9px; appearance: none; -webkit-appearance: none; border: 3px solid white; border-radius: 50%; background: linear-gradient(135deg, #f12b43, #3178ff); box-shadow: 0 2px 9px rgba(21,23,29,.25), 0 0 0 5px rgba(49,120,255,.16); transition: box-shadow .2s ease, transform .2s ease; }
+    .timeline-range::-moz-range-thumb { width: 17px; height: 17px; border: 3px solid white; border-radius: 50%; background: linear-gradient(135deg, #f12b43, #3178ff); box-shadow: 0 2px 9px rgba(21,23,29,.25), 0 0 0 5px rgba(49,120,255,.16); transition: box-shadow .2s ease, transform .2s ease; }
+    .timeline-range:hover::-webkit-slider-thumb { transform: scale(1.12); box-shadow: 0 2px 9px rgba(21,23,29,.25), 0 0 0 8px rgba(241,43,67,.13); }
+    .timeline-range:hover::-moz-range-thumb { transform: scale(1.12); box-shadow: 0 2px 9px rgba(21,23,29,.25), 0 0 0 8px rgba(241,43,67,.13); }
+    .timeline-range:focus-visible { outline: none; }
+    .timeline-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px #2873d8, 0 0 0 7px rgba(40,115,216,.2); }
+    .timeline-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px #2873d8, 0 0 0 7px rgba(40,115,216,.2); }
+    .timeline-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; }
+    .timeline-controls button { display: inline-flex; min-height: 39px; align-items: center; justify-content: center; gap: 8px; padding: 0 13px; border: 1px solid rgba(21,23,29,.2); border-radius: 3px; background: rgba(255,255,255,.58); color: #222630; font-size: 10px; font-weight: 700; cursor: pointer; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .timeline-controls button:hover:not(:disabled) { border-color: var(--blue); background: white; transform: translateY(-2px); }
+    .timeline-controls button:disabled { opacity: .42; cursor: not-allowed; }
+    .timeline-current { color: #565c67; font-size: 9px; font-weight: 600; }
+    .journey-note { max-width: 780px; margin: 14px 0 0; color: #727783; font-size: 9px; line-height: 1.7; }
+
+    .manifesto { position: relative; padding: 83px 0; overflow: hidden; background: linear-gradient(110deg, #c81e36, #ed2b43 55%, #d91f3a); }
+    .manifesto::after { content: "F"; position: absolute; right: 8%; top: -104px; color: rgba(0,0,0,.09); font-family: var(--display); font-size: 410px; font-weight: 900; line-height: 1; }
+    .manifesto-inner { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+    .manifesto h2 { max-width: 690px; margin: 10px 0 0; font-family: var(--display); font-size: clamp(47px, 6.8vw, 83px); font-weight: 900; line-height: .86; text-transform: uppercase; }
+    .manifesto .eyebrow::before { background: white; }
+    .manifesto .eyebrow { color: rgba(255,255,255,.78); }
+    .manifesto .button { flex: 0 0 auto; background: white; color: #17171a; }
+    .manifesto .button:hover { background: #f1f2f5; box-shadow: 0 10px 28px rgba(0,0,0,.18); }
+
+    .footer { padding: 35px 0; background: #f3f4f6; border-top: 1px solid var(--line); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .footer .brand img { width: 130px; }
+    .footer p { margin: 0; color: #606570; font-size: 11px; }
+    .socials { display: flex; gap: 17px; color: #343841; font-size: 11px; font-weight: 600; }
+    .socials a:hover { color: var(--red); }
+
+    html[data-theme="dark"] .topbar { border-color: var(--line); background: rgba(17,20,26,.92); }
+    html[data-theme="dark"] .nav-links { color: #e0e4ec; }
+    html[data-theme="dark"] .menu-toggle { background: var(--panel); color: var(--white); }
+    html[data-theme="dark"] .button-outline { border-color: rgba(255,255,255,.32); }
+    html[data-theme="dark"] .button-outline:hover { background: rgba(255,255,255,.08); }
+    html[data-theme="dark"] .hero { background: radial-gradient(ellipse at 75% 54%, rgba(34,84,181,.18), transparent 34%), radial-gradient(ellipse at 21% 83%, rgba(189,28,51,.12), transparent 30%), #11141a; }
+    html[data-theme="dark"] .hero::before { background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); }
+    html[data-theme="dark"] .eyebrow,
+    html[data-theme="dark"] .hero-copy,
+    html[data-theme="dark"] .hero-note,
+    html[data-theme="dark"] .video-caption,
+    html[data-theme="dark"] .journey-heading p { color: #aab1bf; }
+    html[data-theme="dark"] .hero-note strong { color: var(--white); }
+    html[data-theme="dark"] .hero-video { border-color: var(--line); background: #1b2029; }
+    html[data-theme="dark"] .ticker { border-color: var(--line); background: #1b2029; }
+    html[data-theme="dark"] .ticker-item { color: #e4e7ed; }
+    html[data-theme="dark"] .feature-card { background: linear-gradient(145deg, #1b2029, #151922); }
+    html[data-theme="dark"] .feature-card:nth-child(3) .feature-icon { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #dce2ed; }
+    html[data-theme="dark"] .card-watermark { color: rgba(255,255,255,.045); }
+    html[data-theme="dark"] .journey { background: radial-gradient(ellipse at 75% 50%, rgba(49,120,255,.14), transparent 42%), linear-gradient(180deg, #151922, #11141a); }
+    html[data-theme="dark"] .timeline-glass { border-color: rgba(255,255,255,.13); background: linear-gradient(135deg, rgba(35,41,53,.9), rgba(27,35,49,.82)); box-shadow: 0 28px 80px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.1); }
+    html[data-theme="dark"] .timeline-detail p,
+    html[data-theme="dark"] .timeline-current { color: #b7bfcc; }
+    html[data-theme="dark"] .timeline-unverified { border-color: rgba(255,255,255,.2); color: #b7bfcc; }
+    html[data-theme="dark"] .timeline-slider-row { border-color: var(--line); }
+    html[data-theme="dark"] .timeline-range::-webkit-slider-runnable-track { background: linear-gradient(to right, #f12b43 0, #3178ff var(--slider-progress, 0%), rgba(255,255,255,.2) var(--slider-progress, 0%) 100%); }
+    html[data-theme="dark"] .timeline-range::-moz-range-track { background: rgba(255,255,255,.2); }
+    html[data-theme="dark"] .timeline-controls button { border-color: rgba(255,255,255,.22); background: rgba(17,20,26,.62); color: #e4e7ed; }
+    html[data-theme="dark"] .timeline-controls button:hover:not(:disabled) { background: #252c38; }
+    html[data-theme="dark"] .journey-note { color: #aab1bf; }
+    html[data-theme="dark"] .footer { background: #1b2029; }
+    html[data-theme="dark"] .footer p,
+    html[data-theme="dark"] .socials { color: #b7bfcc; }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .feature-card:nth-child(2) { transition-delay: .1s; }
+    .feature-card:nth-child(3) { transition-delay: .2s; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    @keyframes timeline-breathe { 0%,100% { opacity: .65; transform: scale(.97); } 50% { opacity: 1; transform: scale(1.03); } }
+    @keyframes timeline-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes timeline-year-in { from { opacity: .35; transform: translateY(12px) scale(.97); filter: blur(5px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+    @keyframes timeline-detail-in { from { opacity: .3; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 850px) {
+      .hero { min-height: auto; padding: 145px 0 78px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 5px; }
+      .hero-content { position: relative; z-index: 2; }
+      .visual { min-height: 0; margin-top: 7px; }
+      .section { padding: 82px 0; }
+      .journey { padding: 78px 0; }
+      .journey-heading { display: block; margin-bottom: 25px; }
+      .journey-heading p { margin-top: 16px; }
+      .timeline-content { min-height: 250px; grid-template-columns: 1fr; gap: 25px; align-content: center; }
+      .timeline-year { font-size: clamp(105px, 30vw, 165px); }
+      .timeline-slider-row { margin-top: 25px; }
+      .timeline-controls { flex-wrap: wrap; }
+      .timeline-current { order: -1; width: 100%; text-align: center; }
+    }
+    @media (max-width: 760px) {
+      .topbar { height: 70px; }
+      .brand img { width: 133px; }
+      .nav { position: relative; }
+      .menu-toggle { display: inline-flex; }
+      .nav-links { position: absolute; top: 69px; right: -18px; left: -18px; display: none; align-items: stretch; gap: 0; padding: 7px 19px 18px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.98); box-shadow: 0 15px 26px rgba(9,10,14,.08); }
+      .nav-links.is-open { display: flex; flex-direction: column; }
+      .nav-links > a:not(.button) { padding: 13px 2px; border-bottom: 1px solid rgba(9,10,14,.08); font-size: 12px; }
+      .nav-links .button { margin-top: 12px; min-height: 42px; padding: 0 14px; font-size: 11px; }
+      html[data-theme="dark"] .nav-links { background: rgba(17,20,26,.98); }
+      html[data-theme="dark"] .nav-links > a:not(.button) { border-color: var(--line); }
+    }
+    @media (max-width: 600px) {
+      .wrap { width: min(100% - 36px, 480px); }
+      .hero { padding-top: 132px; }
+      h1 { font-size: clamp(66px, 17vw, 90px); }
+      .hero-copy { max-width: 360px; font-size: 13px; }
+      .visual { margin-inline: 0; }
+      .hero-video { aspect-ratio: 4 / 3; }
+      .section { padding: 72px 0; }
+      .section-heading { display: block; margin-bottom: 28px; }
+      .section-heading p { margin-top: 17px; }
+      .feature-grid { grid-template-columns: 1fr; gap: 11px; }
+      .feature-card { min-height: 235px; }
+      .feature-icon { margin: 17px 0 15px; }
+      .manifesto { padding: 65px 0; }
+      .manifesto-inner { align-items: flex-start; flex-direction: column; }
+      .manifesto h2 { font-size: 58px; }
+      .manifesto::after { right: -20px; top: 20px; font-size: 280px; }
+      .footer-inner { flex-wrap: wrap; }
+      .footer p { order: 3; width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+  <script src="dark-mode.js"></script>
+  <script src="page-animations.js"></script>
+  <link rel="stylesheet" href="dark-mode.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav wrap" aria-label="Main navigation">
+        <a class="brand" href="#home" aria-label="FanMania home">
+          <img src="Screenshot_2026-10-06_143455-removebg-preview.png" alt="FanMania">
+        </a>
+        <div class="nav-links" id="nav-links">
+          <a href="#about">About</a>
+          <a href="products.html">Products</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="#journey">Our journey</a>
+          <a href="contact.html">Contact us</a>
+          <a class="fm-india-tab" href="fm-india.html">FM India</a>
+          <a class="button" href="contact.html">Partner with us <span aria-hidden="true">↗</span></a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Turn on dark mode" aria-pressed="false">
+          <span class="theme-toggle-label">Dark Mode</span>
+          <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-knob"></span></span>
+        </button>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation" aria-controls="nav-links" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-grid wrap">
+          <div class="hero-content">
+            <div class="eyebrow">Here We Go</div>
+            <h1>Their favourite<br>characters.<br><span class="accent">Their everyday</span><br>essentials.<br><span class="accent">That's Fanmania.</span></h1>
+            <p class="hero-copy">FanMania brings beloved characters and iconic brands into everyday life through a diverse range of officially licensed kids' footwear, apparel and accessories. We partner with globally recognised entertainment and lifestyle brands to create character-inspired products that children love and families trust.</p>
+            <div class="hero-actions">
+              <a class="button" href="#join">Find your community <span aria-hidden="true">↗</span></a>
+              <a class="button button-outline" href="https://www.linkedin.com/company/fan-mania/home/" target="_blank" rel="noopener noreferrer">Discover the vibe</a>
+            </div>
+            <div class="hero-note">
+              <div class="avatar-stack" aria-hidden="true">
+                <span class="avatar">J</span><span class="avatar">M</span><span class="avatar">A</span><span class="avatar">K</span>
+              </div>
+              <span><a href="https://www.linkedin.com/company/fan-mania/home/" target="_blank" rel="noopener noreferrer"><strong>Your kind of people</strong></a> are already here</span>
+            </div>
+          </div>
+          <div class="visual">
+            <video class="hero-video" controls autoplay muted loop playsinline preload="metadata" aria-label="FanMania e-commerce presence video">
+              <source src="FM%20Ecom%20presence.mp4" type="video/mp4">
+              Your browser does not support embedded video. <a href="FM%20Ecom%20presence.mp4">Play the FanMania video</a>.
+            </video>
+            <p class="video-caption">FanMania · E-commerce presence</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="ticker" aria-label="Footwear, Apparels, Accesories, We Bring Pop Culture To You, Fanmania">
+        <div class="ticker-track" aria-hidden="true">
+          <span class="ticker-item">Footwear</span>
+          <span class="ticker-item">Apparels</span>
+          <span class="ticker-item">Accesories</span>
+          <span class="ticker-item">We Bring Pop Culture To You</span>
+          <span class="ticker-item">Fanmania</span>
+          <span class="ticker-item">Footwear</span>
+          <span class="ticker-item">Apparels</span>
+          <span class="ticker-item">Accesories</span>
+          <span class="ticker-item">We Bring Pop Culture To You</span>
+          <span class="ticker-item">Fanmania</span>
+        </div>
+      </div>
+
+
+      <section class="journey" id="journey" aria-labelledby="journey-title">
+        <div class="journey-inner wrap">
+          <div class="journey-heading reveal">
+            <div>
+              <div class="eyebrow">The FanMania timeline</div>
+              <h2 id="journey-title">One year at a time.<br><span>Still in motion.</span></h2>
+            </div>
+            <p>Scrub through every year from 2005 to 2026. Confirmed company history is shown where available; other years are ready for your real milestones.</p>
+          </div>
+          <div class="timeline-glass reveal">
+            <div class="timeline-content" data-year="2005" aria-live="polite" aria-atomic="true">
+              <div class="timeline-year" id="timeline-year">2005</div>
+              <div class="timeline-detail">
+                <div class="year-label" id="timeline-label">The beginning</div>
+                <h3 id="timeline-title">FanMania starts its journey.</h3>
+                <p id="timeline-copy">Co-Founders and father-son duo, Jitendra &amp; Nitin Jaggi start Attires MENA in a 400 sqft rental office.</p>
+                <span class="timeline-unverified" id="timeline-status">Confirmed starting year</span>
+              </div>
+            </div>
+            <div class="timeline-slider-row">
+              <label class="section-kicker" for="timeline-slider">Explore the years</label>
+              <input class="timeline-range" id="timeline-slider" type="range" min="0" max="13" step="1" value="0" aria-valuetext="2005">
+            </div>
+            <div class="timeline-controls">
+              <button type="button" id="timeline-previous" aria-label="Go to previous year"><span aria-hidden="true">←</span> Previous year</button>
+              <span class="timeline-current">Selected year: <output id="timeline-output" for="timeline-slider">2005</output></span>
+              <button type="button" id="timeline-next" aria-label="Go to next year">Next year <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+          <p class="journey-note">FanMania’s 2005 start and 2026 present-day endpoint are confirmed. Intermediate years are intentionally left as editable placeholders until verified company history is provided.</p>
+        </div>
+      </section>
+
+      <section class="manifesto" id="join">
+        <div class="manifesto-inner wrap">
+          <div>
+            <div class="eyebrow">The crowd is better together</div>
+            <h2>Whatever you cheer for,<br>We Are here.</h2>
+          </div>
+          <a class="button" href="mailto:shadma@fanmania.ae">Join FanMania <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner wrap">
+        <a class="brand" href="#home" aria-label="FanMania home">
+          <img src="Screenshot_2026-10-06_143455-removebg-preview.png" alt="FanMania">
+        </a>
+        <p>© <span id="year"></span> Fanmania.ae can do it.</p>
+        <div class="socials">
+          <a href="https://www.instagram.com/fanmaniame?exln=MTlsdDFkazhpcGY2Nw==" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://youtube.com/@fanmaniadubai?si=Xp51ItAUXbbGJ5VT" target="_blank" rel="noopener noreferrer">Youtube</a>
+          <a href="https://www.linkedin.com/company/fan-mania/home/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const menuToggle = document.getElementById("menu-toggle");
+    const menuLinks = document.getElementById("nav-links");
+    function closeMenu() {
+      menuLinks.classList.remove("is-open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation");
+    }
+    menuToggle.addEventListener("click", () => {
+      const open = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", String(!open));
+      menuToggle.setAttribute("aria-label", open ? "Open navigation" : "Close navigation");
+      menuLinks.classList.toggle("is-open", !open);
+    });
+    menuLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", closeMenu));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeMenu();
+    });
+
+    const timelineSlider = document.getElementById("timeline-slider");
+    const timelineContent = document.querySelector(".timeline-content");
+    const timelineYear = document.getElementById("timeline-year");
+    const timelineLabel = document.getElementById("timeline-label");
+    const timelineTitle = document.getElementById("timeline-title");
+    const timelineCopy = document.getElementById("timeline-copy");
+    const timelineStatus = document.getElementById("timeline-status");
+    const timelineOutput = document.getElementById("timeline-output");
+    const timelinePrevious = document.getElementById("timeline-previous");
+    const timelineNext = document.getElementById("timeline-next");
+
+    const removedTimelineYears = new Set([2006, 2008, 2010, 2011, 2013, 2015, 2017, 2019]);
+    const timelineYears = Array.from({ length: 22 }, (_, index) => 2005 + index)
+      .filter(year => !removedTimelineYears.has(year));
+    timelineSlider.max = String(timelineYears.length - 1);
+    const timelineData = timelineYears.map(year => {
+      return {
+        year,
+        label: "A year in the story",
+        title: "Add this year’s chapter.",
+        copy: "No verified company update for " + year + " has been provided yet. Add an approved milestone or company detail for this year here.",
+        status: "Company history to be confirmed"
+      };
+    });
+
+    const setTimelineMilestone = (year, label, title, copy, status = "Company milestone") => {
+      const index = timelineYears.indexOf(year);
+      if (index !== -1) timelineData[index] = { year, label, title, copy, status };
+    };
+    setTimelineMilestone(2005, "The beginning", "FanMania starts its journey.", "Co-Founders and father-son duo, Jitendra & Nitin Jaggi start Attires MENA in a 400 sqft rental office.", "Confirmed starting year");
+    setTimelineMilestone(2007, "Regional expansion", "Expanding into Saudi Arabia.", "Expansion of business to Saudi Arabia with distribution in hypermarkets.");
+    setTimelineMilestone(2009, "Growing the team", "A new chapter in product design.", "Jitin Jaggi joins to take over Product Design and Sourcing.");
+    setTimelineMilestone(2012, "Entering licensed merchandise", "First licensing partnerships.", "Foray into the licensed merchandise business. First tie ups with Nickelodeon & Cartoon Network.");
+    setTimelineMilestone(2014, "Portfolio expansion", "A major licensing deal.", "Warner Brothers deal is signed and the license portfolio expands.");
+    setTimelineMilestone(2016, "A premier licensee", "The portfolio comes together.", "Deal with Disney completes the portfolio. We are now considered among region’s premier licensees.");
+    setTimelineMilestone(2018, "Fan Mania is born", "A new co-founder joins.", "Co-founder Akshay Gehi joins hands and Fan Mania is born.");
+    setTimelineMilestone(2020, "A new home in Jebel Ali", "Moving into a self-owned property.", "We move into a large 125,000 sqft self-owned property in Jebel Ali located within minutes of every major regional retailer’s warehouse.");
+    setTimelineMilestone(2021, "A growing creative team", "Four times the talent.", "The team quadruples in size. Fan Mania gets regarded as one of the finest creative teams in the industry.");
+    setTimelineMilestone(2026, "FanMania today", "The story continues.", "In 2026, FanMania is an international licensing and children’s merchandise company working with entertainment and character IPs.", "Present day");
+
+    function updateTimeline() {
+      const selectedIndex = Number(timelineSlider.value);
+      const year = timelineYears[selectedIndex];
+      const information = timelineData[selectedIndex];
+
+      timelineOutput.value = String(year);
+      timelineOutput.textContent = String(year);
+      timelineSlider.setAttribute("aria-valuetext", String(year));
+      timelineSlider.style.setProperty("--slider-progress", (selectedIndex / (timelineYears.length - 1) * 100) + "%");
+      timelinePrevious.disabled = selectedIndex === 0;
+      timelineNext.disabled = selectedIndex === timelineYears.length - 1;
+      timelineYear.textContent = String(year);
+      timelineLabel.textContent = information.label;
+      timelineTitle.textContent = information.title;
+      timelineCopy.textContent = information.copy;
+      timelineStatus.textContent = information.status;
+      if (timelineContent.dataset.year !== String(year)) {
+        timelineContent.dataset.year = String(year);
+        timelineContent.classList.remove("is-changing");
+        void timelineContent.offsetWidth;
+        timelineContent.classList.add("is-changing");
+      }
+    }
+
+    function advanceTimeline() {
+      const nextIndex = (Number(timelineSlider.value) + 1) % timelineYears.length;
+      timelineSlider.value = String(nextIndex);
+      updateTimeline();
+    }
+
+    function advanceTimelineWhenVisible() {
+      if (document.visibilityState === "visible") advanceTimeline();
+    }
+
+    let timelineAutoplay = window.setInterval(advanceTimelineWhenVisible, 12500);
+
+    function restartTimelineAutoplay() {
+      window.clearInterval(timelineAutoplay);
+      timelineAutoplay = window.setInterval(advanceTimelineWhenVisible, 12500);
+    }
+
+    timelineSlider.addEventListener("input", () => {
+      updateTimeline();
+      restartTimelineAutoplay();
+    });
+    timelinePrevious.addEventListener("click", () => {
+      timelineSlider.value = String(Number(timelineSlider.value) - 1);
+      updateTimeline();
+      restartTimelineAutoplay();
+    });
+    timelineNext.addEventListener("click", () => {
+      timelineSlider.value = String(Number(timelineSlider.value) + 1);
+      updateTimeline();
+      restartTimelineAutoplay();
+    });
+    updateTimeline();
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal").forEach(element => revealObserver.observe(element));
+  </script>
+</body>
+</html>
